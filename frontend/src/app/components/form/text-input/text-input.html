@@ -1,0 +1,9 @@
+<label [htmlFor]="inputId()">{{ label() }}</label>
+<input [id]="inputId()" [type]="type()" [placeholder]="placeholder()" [formField]="formField2()">
+@if (showErrorList() && formField2()().touched() && formField2()().invalid()) {
+    <ul class="error-list">
+    @for (error of formField2()().errors(); track error.message) {
+        <li>{{ error.message }}</li>
+    }
+    </ul>
+}
