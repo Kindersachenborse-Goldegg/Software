@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --bg-dark: oklch(0.92 0.01 59);
+    --bg: oklch(0.96 0.01 59);
+    --bg-light: oklch(1 0.01 59);
+    --text: oklch(0.15 0.02 59);
+    --text-muted: oklch(0.4 0.02 59);
+    --highlight: oklch(1 0.02 59);
+    --border: oklch(0.6 0.02 59);
+    --border-muted: oklch(0.7 0.02 59);
+
+    --danger: oklch(0.7 0.2 30);
+    --warning: oklch(0.7 0.2 100);
+    --success: oklch(0.7 0.2 160);
+    --info: oklch(0.7 0.2 260);
+
+    --danger-muted: oklch(0.8 0.2 30);
+    --warning-muted: oklch(0.8 0.2 100);
+    --success-muted: oklch(0.8 0.2 160);
+    --info-muted: oklch(0.8 0.2 260);
+}
+
+a {
+    color: var(--info);
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}

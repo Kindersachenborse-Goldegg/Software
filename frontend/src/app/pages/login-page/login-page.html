@@ -1,0 +1,19 @@
+<header>
+    <h1>Login</h1>
+    <p>Melden Sie sich mit Ihren aktuellen Daten an</p>
+</header>
+
+<form [formRoot]="form">
+    <text-input inputId="email" autocomplete="email" label="Email" [formField2]="form.username" />
+    <password-input inputId="password" autocomplete="password" label="Passwort" [formField2]="form.password" />
+
+    <div class="rightbound">
+        <a routerLink="/reset-password">Passwort vergessen?</a>
+    </div>
+
+    <custom-button type="success" class="login-button" [disabled]="form().invalid()">
+        <spinner [resource]="resource()" /> Anmelden
+    </custom-button>
+    <custom-button type="neutral" class="register-button" [isNoSubmit]="true"
+        routerLink="/register">Registrieren</custom-button>
+</form>

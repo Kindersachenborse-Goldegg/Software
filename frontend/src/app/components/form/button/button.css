@@ -1,0 +1,51 @@
+.neutral {
+    --button-bg: var(--bg);
+    --button-bg-hover: var(--bg-light);
+}
+
+.danger {
+    --button-bg: var(--danger);
+    --button-bg-hover: var(--danger-muted);
+}
+
+.success {
+    --button-bg: var(--success);
+    --button-bg-hover: var(--success-muted);
+}
+
+.info {
+    --button-bg: var(--info);
+    --button-bg-hover: var(--info-muted);
+}
+
+.warning {
+    --button-bg: var(--warning);
+    --button-bg-hover: var(--warning-muted);
+}
+
+button,
+input[type=button],
+input[type=submit] {
+    border: 2px solid var(--border);
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    background: var(--button-bg);
+    color: var(--text);
+
+    width: 100%;
+
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &:disabled {
+        cursor: default;
+        opacity: 0.7;
+    }
+
+    &:not(:disabled):hover {
+        border: 2px solid var(--border-muted);
+        background-color: var(--button-bg-hover);
+    }
+}

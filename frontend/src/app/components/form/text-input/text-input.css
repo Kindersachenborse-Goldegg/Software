@@ -1,0 +1,38 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    background-color: var(--bg-light);
+    border: 2px solid var(--border-muted);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &:focus {
+        outline: none;
+        border: 2px solid var(--border);
+    }
+}
+
+.error-list>li {
+    color: var(--danger);
+}
+
+:host.invalid {
+    >label {
+        color: var(--danger);
+
+        &::before {
+            content: var(--exclamation);
+            margin-right: 0.5rem;
+        }
+    }
+
+    >input {
+        --border-muted: var(--danger-muted);
+        --border: var(--danger);
+    }
+}

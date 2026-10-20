@@ -30,3 +30,13 @@ export interface CreateItemModel {
 export interface ModifyItemModel {
     deleted: boolean
 }
+
+// AUTH
+export interface LoginModel {
+    username: string,
+    password: string
+}
+
+export interface TokenResponseModel {
+    token: string
+}

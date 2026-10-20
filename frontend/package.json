@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "ng build",
-    "dev": "ng serve --watch --configuration development",
+    "dev": "ng serve --watch --configuration development --host 0.0.0.0",
     "test": "ng test"
   },
   "prettier": {
