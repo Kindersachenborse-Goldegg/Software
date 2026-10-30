@@ -1,6 +1,29 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { lastValueFrom, Observable, ReplaySubject } from 'rxjs';
+
+export type ErrorCodes = { [key: number]: string }
+
+export interface ApiError {
+  errorText: string | "unknown"
+  statusCode: number,
+  rawResponse: HttpErrorResponse
+}
+
+export type Resource<T> =
+  { state: "loading", error: null, value: T } |
+  { state: "error", error: ApiError, value: T } |
+  { state: "done", error: null, value: T }
+
+const BASE_URL = `http://${location.hostname}:8000/api` // TODO find a better way to differentiate between production, development with a production backend and development with a mock-backend
+
+export const getError = async <T>(resource: Observable<Resource<T>>): Promise<{ kind: 'serverError', message: string } | undefined> => {
+  const response = await lastValueFrom(resource);
+  if (response.state == "error") {
+    return { kind: 'serverError', message: response.error.errorText }
+  }
+  return undefined
+}
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +59,7 @@ export class ApiService {
         }
 
         const error: ApiError = {
-          errorType,
+          errorText: errorType,
           statusCode: err.status,
           rawResponse: err
         }
@@ -58,7 +81,7 @@ export class ApiService {
    * see post in {@link ApiService}
    */
   public get<T>(url: string, defaultValue: T, expectedErrorCodes?: ErrorCodes): Observable<Resource<T>> {
-    const response = this.httpClient.get<T>(url, {
+    const response = this.httpClient.get<T>(BASE_URL + url, {
       observe: 'response'
     })
 
@@ -70,11 +93,11 @@ export class ApiService {
    * @param url the url without the base
    * @param defaultValue what value should the resource have when no response exists
    * @param body the body to send, must be of type R
-   * @param expectedErrorCodes the error-codes which might legitimately be returned for this route, all others create a popup to warn the user. Example: {404: "item-not-found"} result.error.errorType will only ever have values which are in this object or 'unknown'
+   * @param expectedErrorCodes the error-codes which might legitimately be returned for this route, all others create a popup to warn the user. Example: {404: "this item was not found"} result.error.errorText will only ever have values which are in this object or 'unknown'
    * @returns the Resource as an Observable
    */
   public post<R, T>(url: string, defaultValue: T, body: R, expectedErrorCodes?: ErrorCodes): Observable<Resource<T>> {
-    const response = this.httpClient.post<T>(url, body, {
+    const response = this.httpClient.post<T>(BASE_URL + url, body, {
       observe: 'response'
     })
 
@@ -82,15 +105,3 @@ export class ApiService {
   }
 }
 
-export type ErrorCodes = { [key: number]: string }
-
-export interface ApiError {
-  errorType: string | "unknown"
-  statusCode: number,
-  rawResponse: HttpErrorResponse
-}
-
-export type Resource<T> =
-  { state: "loading", error: null, value: T } |
-  { state: "error", error: ApiError, value: T } |
-  { state: "done", error: null, value: T }

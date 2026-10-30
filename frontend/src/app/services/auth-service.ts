@@ -20,11 +20,11 @@ export class AuthService {
    */
   public login(loginData: LoginModel): Observable<Resource<TokenResponseModel>> {
     const resource = this.apiService.post<LoginModel, TokenResponseModel>(
-      "http://192.168.222.18/login",
+      "/login",
       { token: "invalid" },
       loginData,
       {
-        403: "incorrect-credentials"
+        401: "Benutzername oder Passwort inkorrekt"
       });
 
     resource.subscribe(res => {

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { TextInput } from '../text-input/text-input';
 import { FormField } from '@angular/forms/signals';
+import { ErrorList } from '../../error-list/error-list';
+import { TextInput } from '../text-input/text-input';
 
 @Component({
   selector: 'password-input',
-  imports: [FormField],
+  imports: [FormField, ErrorList],
   templateUrl: './password-input.html',
   styleUrl: './password-input.css',
 })

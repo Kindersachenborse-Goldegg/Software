@@ -7,6 +7,9 @@
     <text-input inputId="email" autocomplete="email" label="Email" [formField2]="form.username" />
     <password-input inputId="password" autocomplete="password" label="Passwort" [formField2]="form.password" />
 
+    <error-list [form]="form" />
+
+
     <div class="rightbound">
         <a routerLink="/reset-password">Passwort vergessen?</a>
     </div>

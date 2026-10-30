@@ -1,10 +1,11 @@
 import { Component, input, signal } from '@angular/core';
-import { BaseInput } from '../base-input/base-input';
 import { FormField } from '@angular/forms/signals';
+import { ErrorList } from '../../error-list/error-list';
+import { BaseInput } from '../base-input/base-input';
 
 @Component({
   selector: 'text-input',
-  imports: [FormField],
+  imports: [FormField, ErrorList],
   templateUrl: './text-input.html',
   styleUrl: './text-input.css',
 })
@@ -16,7 +17,7 @@ export class TextInput extends BaseInput<string> {
 
 @Component({
   selector: 'tel-input',
-  imports: [FormField],
+  imports: [FormField, ErrorList],
   templateUrl: './text-input.html',
   styleUrl: './text-input.css',
 })
@@ -29,7 +30,7 @@ export class TelInput extends TextInput {
 
 @Component({
   selector: 'email-input',
-  imports: [FormField],
+  imports: [FormField, ErrorList],
   templateUrl: './text-input.html',
   styleUrl: './text-input.css',
 })
