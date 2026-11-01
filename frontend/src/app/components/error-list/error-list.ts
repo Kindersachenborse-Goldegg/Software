@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { FieldTree } from '@angular/forms/signals';
 
 @Component({
@@ -9,4 +9,8 @@ import { FieldTree } from '@angular/forms/signals';
 })
 export class ErrorList {
   public form = input.required<FieldTree<unknown, any>>()
+
+  public errors = computed(() => {
+    return this.form()().errors().filter(e => e.kind !== "required")
+  })
 }

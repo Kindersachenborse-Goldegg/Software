@@ -1,1 +1,32 @@
-<p>register-page works!</p>
+<header class="center">
+    <h1>Registrierung</h1>
+    <p>Registrieren Sie sich hier für einen Verkaufplatz</p>
+</header>
+
+<form [formRoot]="form">
+    <div>
+        <text-input inputId="firstname" [formField2]="form.firstname" autocomplete="given-name" label="Vorname" />
+        <text-input inputId="lastname" [formField2]="form.lastname" autocomplete="family-name" label="Nachname" />
+    </div>
+
+    <email-input inputId="email" [formField2]="form.email" autocomplete="email" label="E-Mail" />
+    <tel-input inputId="phone" [formField2]="form.phone" autocomplete="tel" label="Telefonnummer" />
+    <text-input inputId="city" [formField2]="form.city" autocomplete="address-level2" label="Ort" />
+    <password-input inputId="password" [formField2]="form.password" autocomplete="new-password" label="Passwort" />
+    <password-input inputId="password2" [formField2]="form.password2" autocomplete="off" label="Passwort wiederholen" />
+
+    <checkbox-input inputId="tnc" [formField2]="form.accept_tnc" autocomplete="off" [showErrorList]="false">Ich stimme
+        den Regeln zu</checkbox-input>
+
+    <error-list [form]="form" />
+
+    <custom-button type="success" [disabled]="form().invalid()">
+        <spinner [resource]="resource()" />Registrieren
+    </custom-button>
+</form>
+
+<custom-popup [(open)]="showPopup">
+    <h1>Erfolgreich Registriert</h1>
+    <p>Bevor Sie diese Seite verwenden können, müssen Sie binnen 24h Ihre Email-Adresse bestätigen</p>
+    <custom-button type="success" routerLink="/login">Zur Anmeldeseite</custom-button>
+</custom-popup>

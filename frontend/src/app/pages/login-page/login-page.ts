@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ErrorList } from '../../components/error-list/error-list';
 import { Button } from '../../components/form/button/button';
 import { PasswordInput } from '../../components/form/password-input/password-input';
-import { TextInput } from '../../components/form/text-input/text-input';
+import { EmailInput } from '../../components/form/text-input/text-input';
 import { LoadingSpinner } from '../../components/loading-spinner/loading-spinner';
 import { LoginModel, TokenResponseModel } from '../../models';
 import { getError, Resource } from '../../services/api-service';
@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'login-page',
-  imports: [TextInput, FormRoot, PasswordInput, RouterModule, Button, LoadingSpinner, ErrorList],
+  imports: [EmailInput, FormRoot, PasswordInput, RouterModule, Button, LoadingSpinner, ErrorList],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })

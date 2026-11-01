@@ -1,6 +1,6 @@
-@if(form()().errors().length) {
+@if(errors().length) {
 <ul class="error-list">
-    @for (error of form()().errors(); track $index) {
+    @for (error of errors(); track $index) {
     <li>{{error.message ?? error.kind}}</li>
     }
 </ul>

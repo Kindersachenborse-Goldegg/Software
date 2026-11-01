@@ -25,4 +25,37 @@ a {
 
 body {
     font-family: "Roboto", sans-serif;
+
+    &:has(dialog[open]) {
+        overflow: hidden
+    }
+}
+
+
+header.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &>h1 {
+        margin-bottom: 0;
+    }
+
+    &>p {
+        color: var(--text-muted);
+    }
+}
+
+form.form {
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.25rem;
+}
+
+.rightbound {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: end;
 }

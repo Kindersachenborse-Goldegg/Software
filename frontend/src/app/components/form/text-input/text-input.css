@@ -1,6 +1,13 @@
 :host {
     display: flex;
     flex-direction: column;
+
+    &:not(.hide-required):has(input[required]) {
+        &>label::after {
+            content: "*";
+            color: red;
+        }
+    }
 }
 
 input {

@@ -40,3 +40,27 @@ export interface LoginModel {
 export interface TokenResponseModel {
     token: string
 }
+
+// USER
+export interface ResetPasswordRequestModel {
+    email: string
+}
+
+export interface ResetPasswordModel {
+    secret: string,
+    password: string
+}
+
+export interface RegisterModel {
+    firstname: string
+    lastname: string
+    phone: string
+    city: string
+    email: string
+    password: string
+    accept_tnc: boolean
+}
+
+export interface RegisterResponseModel {
+    nickname: string
+}

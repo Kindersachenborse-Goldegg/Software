@@ -2,5 +2,39 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
-    }
+    },
+    "restoreTerminals.runOnStartup": true,
+    "restoreTerminals.terminals": [
+        {
+            "cwd": "${workspaceFolder}/frontend",
+            "splitTerminals": [
+                {
+                    "name": "frontend",
+                    "commands": [
+                        "npm run dev"
+                    ]
+                }
+            ]
+        },
+        {
+            "cwd": "${workspaceFolder}/frontend/src",
+            "splitTerminals": [
+                {
+                    "name": "angular",
+                    "commands": []
+                }
+            ]
+        },
+        {
+            "cwd": "${workspaceFolder}/frontend/test_backend",
+            "splitTerminals": [
+                {
+                    "name": "backend",
+                    "commands": [
+                        "fastapi dev main.py --host 0.0.0.0"
+                    ]
+                }
+            ]
+        }
+    ]
 }
