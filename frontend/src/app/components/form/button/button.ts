@@ -8,6 +8,5 @@ import { Component, input } from '@angular/core';
 })
 export class Button {
   disabled = input<boolean>(false);
-  type = input.required<"danger" | "warning" | "info" | "success" | "neutral">()
   isNoSubmit = input<boolean>(false);
 }

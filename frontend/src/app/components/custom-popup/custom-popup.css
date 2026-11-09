@@ -10,9 +10,9 @@ dialog {
     }
 
     &[open] {
-        border: 2px solid var(--border-muted);
+        border: 1px solid var(--bg-text-muted);
         border-radius: 0.75rem;
-        padding: 0.5rem;
+        padding: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
 
@@ -22,5 +22,8 @@ dialog {
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        background-color: var(--bg);
+        color: var(--bg-text);
     }
 }

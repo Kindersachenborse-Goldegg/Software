@@ -89,4 +89,5 @@ export class BaseInput<T> {
   public showErrorList = input<boolean>(true);
 
   public autocomplete = input.required<HTMLAutocompleteAttribute>();
+  public autofocus = input<boolean>(false);
 }

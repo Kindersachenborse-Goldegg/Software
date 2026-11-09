@@ -1,4 +1,4 @@
-<input [id]="inputId()" type="checkbox" [formField]="formField2()">
+<input [id]="inputId()" type="checkbox" [formField]="formField2()" #input>
 <label [htmlFor]="inputId()"><ng-content /></label>
 @if(showErrorList() && formField2()().touched()) {
 <error-list [form]="formField2()" />

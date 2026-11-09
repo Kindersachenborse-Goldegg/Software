@@ -1,5 +1,5 @@
 :root {
-    --bg-dark: oklch(0.92 0.01 59);
+    /*--bg-dark: oklch(0.92 0.01 59);
     --bg: oklch(0.96 0.01 59);
     --bg-light: oklch(1 0.01 59);
     --text: oklch(0.15 0.02 59);
@@ -17,18 +17,106 @@
     --warning-muted: oklch(0.8 0.2 100);
     --success-muted: oklch(0.8 0.2 160);
     --info-muted: oklch(0.8 0.2 260);
+
+    --outline: 3px solid var(--info);*/
+
+    /* general colors */
+    --black: #060606;
+    --white: #fafafa;
+    --danger: oklch(0.7 0.2 30);
+
+    /* light mode */
+    --primary:
+        /*#f89d0e*/
+        #6ea71a;
+    --primary-hover: color-mix(in oklab, var(--primary), black 15%);
+    --primary-text: var(--white);
+    --bg: #f9f9f9;
+    --bg-front: #f3f3f3;
+    --bg-text: var(--black);
+    --bg-text-muted: #c5c5c5;
+
+    --outline: 3px solid var(--primary);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary: lightblue;
+        /* primary color */
+
+        --primary-hover: color-mix(in oklab, var(--primary), black 15%);
+        /* primary color on hover */
+
+        --primary-text: white;
+        /* text that is on --primary */
+
+        --bg: red;
+        /* main background */
+
+        --bg-front: green;
+        /* secondary background (for inputs, etc) */
+
+        --bg-text: yellow;
+        /* text that is on --bg or --bg-front */
+
+        --bg-text-muted: purple;
+        /* text that is on --bg or --bg-front and muted */
+    }
+}
+
+.neutral-old {
+    --border: var(--bg-front);
+    --border-hover: var(--bg-text-muted);
+
+    --text: var(--bg-text);
+
+    --button-bg: var(--bg);
+    --button-bg-hover: var(--bg-front);
+}
+
+.neutral {
+    --border: var(--bg-text-muted);
+    --border-hover: var(--bg-text-muted);
+
+    --text: var(--bg-text);
+
+    --button-bg: var(--bg-front);
+    --button-bg-hover: var(--bg-front);
+}
+
+.success {
+    --border: var(--primary);
+    --border-hover: var(--primary-hover);
+
+    --text: var(--primary-text);
+
+    --button-bg: var(--primary);
+    --button-bg-hover: var(--primary-hover);
+}
+
+* {
+    transition:
+        background-color 100ms, border 100ms;
 }
 
 a {
-    color: var(--info);
+    color: var(--primary);
+
+    &:hover {
+        color: var(--primary-hover);
+    }
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 
     &:has(dialog[open]) {
         overflow: hidden
     }
+
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--bg-text);
 }
 
 
@@ -51,11 +139,14 @@ form.form {
     margin: 0.5rem;
     display: flex;
     flex-direction: column;
-    row-gap: 0.25rem;
+    row-gap: 0.5rem;
+
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .rightbound {
-    margin-top: 0.75rem;
     display: flex;
     justify-content: end;
 }

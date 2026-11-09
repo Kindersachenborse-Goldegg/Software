@@ -10,17 +10,23 @@
     }
 }
 
+label {
+    margin-bottom: 0.25rem;
+    color: var(--bg-text);
+}
+
 input {
-    background-color: var(--bg-light);
-    border: 2px solid var(--border-muted);
+    --border: var(--bg-text-muted);
+    background-color: var(--bg-front);
+    color: var(--bg-text);
+    border: 1px solid var(--border);
     border-radius: 0.25rem;
-    padding: 0.5rem;
+    padding: 0.75rem;
     padding-left: 1rem;
-    padding-right: 1rem;
 
     &:focus {
-        outline: none;
-        border: 2px solid var(--border);
+        outline: var(--outline);
+        outline-offset: 1px;
     }
 }
 
@@ -34,8 +40,7 @@ input {
         }
     }
 
-    >input {
-        --border-muted: var(--danger-muted);
+    input {
         --border: var(--danger);
     }
 }

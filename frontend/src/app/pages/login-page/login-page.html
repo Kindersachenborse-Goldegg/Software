@@ -1,13 +1,15 @@
 <header class="center">
-    <h1>Login</h1>
-    <p>Melden Sie sich mit Ihren aktuellen Daten an</p>
+    <div class="stack">
+        <img src="image.png">
+        <h1>Login</h1>
+    </div>
 </header>
 
 <form [formRoot]="form" class="form">
-    <email-input inputId="email" autocomplete="email" label="Email" [formField2]="form.username"
-        class="hide-required" />
+    <email-input inputId="email" autocomplete="email" label="Email" [formField2]="form.username" class="hide-required"
+        placeholder="email@example.com" />
     <password-input inputId="password" autocomplete="current-password" label="Passwort" [formField2]="form.password"
-        class="hide-required" />
+        class="hide-required" placeholder="Passwort" />
 
     <error-list [form]="form" />
 
@@ -16,9 +18,9 @@
         <a routerLink="/public/reset-password" [state]="{'email': form().value().username}">Passwort vergessen?</a>
     </div>
 
-    <custom-button type="success" class="login-button" [disabled]="form().invalid()">
+    <custom-button class="login-button success" [disabled]="form().invalid()">
         <spinner [resource]="resource()" /> Anmelden
     </custom-button>
-    <custom-button type="neutral" class="register-button" [isNoSubmit]="true"
+    <custom-button class="register-button neutral" [isNoSubmit]="true"
         routerLink="/public/register">Registrieren</custom-button>
 </form>

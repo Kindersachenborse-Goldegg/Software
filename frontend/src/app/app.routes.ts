@@ -25,5 +25,10 @@ export const routes: Routes = [
     {
         path: "public",
         component: PublicHomePage
+    },
+    {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "login"
     }
 ];

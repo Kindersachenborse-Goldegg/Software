@@ -15,7 +15,7 @@ export type Resource<T> =
   { state: "error", error: ApiError, value: T } |
   { state: "done", error: null, value: T }
 
-const BASE_URL = `http://${location.hostname}:8000/api` // TODO find a better way to differentiate between production, development with a production backend and development with a mock-backend
+const BASE_URL = `${location.protocol}//${location.hostname}/api`
 
 export const getError = async <T>(resource: Observable<Resource<T>>): Promise<{ kind: 'serverError', message: string } | undefined> => {
   const response = await lastValueFrom(resource);

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { form, FormRoot, required, validateTree } from '@angular/forms/signals';
+import { form, FormRoot, minLength, required, validateTree } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CustomPopup } from '../../../components/custom-popup/custom-popup';
 import { ErrorList } from '../../../components/error-list/error-list';
@@ -33,6 +33,7 @@ export class SetPasswordPage {
   public form = form(this.model, (schema) => {
     required(schema.password, { message: "Passwort muss ausgefüllt werden" })
     required(schema.password2, { message: "Passwort muss ausgefüllt werden" })
+    minLength(schema.password, 8, { message: "Das Passwort muss aus mindestens 8 Zeichen bestehen" })
 
     validateTree(schema, (ctx) => {
       if (ctx.valueOf(schema.password) !== ctx.valueOf(schema.password2)) {

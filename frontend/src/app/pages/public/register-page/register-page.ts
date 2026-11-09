@@ -22,11 +22,13 @@ interface RegisterFormModel extends RegisterModel {
   templateUrl: './register-page.html',
   styleUrl: './register-page.css',
 })
-export class RegisterPage {
+export class RegisterPage { // TODO rewrite to two components with routes?
   private userService = inject(UserService);
 
   public resource = signal<Resource<RegisterResponseModel> | null>(null);
   public showPopup = signal<boolean>(false);
+  public isFirst = signal<boolean>(true);
+
   private model = signal<RegisterFormModel>({
     firstname: "",
     lastname: "",
@@ -38,12 +40,21 @@ export class RegisterPage {
     accept_tnc: false
   })
 
-  public form = form(this.model, (schema) => {
+  public form1 = form(this.model, (schema) => {
     required(schema.firstname, { message: "Der Vorname muss angegeben werden" })
     required(schema.lastname, { message: "Der Nachname muss angegeben werden" })
     required(schema.city, { message: "Der Wohnort muss angegeben werden" })
-    required(schema.email, { message: "die E-mail Adresse muss angegeben werden" })
     required(schema.phone, { message: "Eine gültige Telefonnummer muss hinterlegt werden" })
+  }, {
+    submission: {
+      action: async (fieldTree) => {
+        this.isFirst.set(false);
+      }
+    }
+  })
+
+  public form2 = form(this.model, (schema) => {
+    required(schema.email, { message: "die E-mail Adresse muss angegeben werden" })
     required(schema.password, { message: "Ein Passwort muss gesetzt werden" })
     required(schema.password2, { message: "Das Passwort muss wiederholt werden" })
     required(schema.accept_tnc, { message: "Sie müssen den AGBs zustimmen" })
@@ -71,7 +82,7 @@ export class RegisterPage {
         const error = await getError(resource);
         if (error) return error;
 
-        fieldTree().reset({
+        this.model.set({
           firstname: "",
           lastname: "",
           city: "",
