@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Optional, List
 from asyncio import sleep
 
 def readHeader(authorization: Annotated[str, Header()]):
@@ -54,6 +54,20 @@ class RegisterModel(BaseModel):
 class RegisterResponseModel(BaseModel):
     nickname: str
 
+class PublicItemModel(BaseModel):
+    name: str
+    size: Optional[str]
+    pice: int
+    barcode: int
+    positionInList: int
+
+class ListModel(BaseModel):
+    id: int
+    userId: int
+    name: str
+    maxItemCount: int
+    items: List[PublicItemModel]
+
 @app.post("/api/login")
 async def login(loginModel: LoginRequestModel) -> LoginResponseModel:
     if loginModel.username == "user":
@@ -96,3 +110,34 @@ async def set_password(model: SetPasswordModel) -> str:
         status_code=404,
         detail="secret nicht gefunden"
     )
+
+@app.get("/api/list")
+async def get_my_lists() -> List[ListModel]:
+    return [
+        ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
+        ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
+            PublicItemModel(name="T-Shirt", size=None, pice=5, barcode=123456789124, positionInList=1),
+            PublicItemModel(name="Host", size="30/32", pice=5, barcode=123456789125, positionInList=2)
+        ]),
+        ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
+            PublicItemModel(name="T-Shirt", size="S", pice=5, barcode=123456789123, positionInList=1)
+        ])
+    ]
+
+@app.post("/api/list")
+async def create_new_list() -> List[ListModel]:
+    raise HTTPException(
+        status_code=403,
+        detail="Leider kein Platz mehr frei :("
+    )
+    return [
+        ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
+        ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
+            PublicItemModel(name="T-Shirt", size=None, pice=5, barcode=123456789124, positionInList=1),
+            PublicItemModel(name="Host", size="30/32", pice=5, barcode=123456789125, positionInList=2)
+        ]),
+        ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
+            PublicItemModel(name="T-Shirt", size="S", pice=5, barcode=123456789123, positionInList=1)
+        ]),
+        ListModel(id=3, userId=0, name="Zwackelmann 1", maxItemCount=20, items=[])
+    ]

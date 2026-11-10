@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CreateItemModel, ListModel, ModifyItemModel, PrintListModel } from '../models';
 import { ApiService, Resource } from './api-service';
-import { CreateItemModel, ListModel, ModifyItemModel, PrintListModel, PublicItemModel } from '../models';
 
 const INVALID_LIST: ListModel = {
   id: -1,
@@ -38,7 +38,9 @@ export class PublicListSerivce {
    * create a new list
    */
   public createNewList(): Observable<Resource<ListModel[]>> {
-    const resource = this.apiService.post<null, ListModel[]>("/list", [], null);
+    const resource = this.apiService.post<null, ListModel[]>("/list", [], null, {
+      403: "leider ist kein Platz mehr vorhanden"
+    });
     resource.subscribe(resource => {
       if (resource.state == "done") {
         this._myLists.set(resource.value)

@@ -17,6 +17,7 @@ export interface PublicItemModel {
     name: string,
     size: string, // may be empty
     pice: number // price in euro
+    deleted: boolean
     barcode: number,
     positionInList: number,
 }

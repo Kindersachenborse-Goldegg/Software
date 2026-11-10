@@ -25,10 +25,12 @@
     --white: #fafafa;
     --danger: oklch(0.7 0.2 30);
 
+    --brand-green: #6ea71a;
+    --brand-yellow: #f89d0e;
+    --brand-red: #ae0808;
+
     /* light mode */
-    --primary:
-        /*#f89d0e*/
-        #6ea71a;
+    --primary: var(--brand-green);
     --primary-hover: color-mix(in oklab, var(--primary), black 15%);
     --primary-text: var(--white);
     --bg: #f9f9f9;
@@ -37,6 +39,7 @@
     --bg-text-muted: #c5c5c5;
 
     --outline: 3px solid var(--primary);
+    --border-radius: 0.25rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +65,21 @@
         --bg-text-muted: purple;
         /* text that is on --bg or --bg-front and muted */
     }
+}
+
+.red {
+    --color: var(--brand-red);
+    --text-on-color: white;
+}
+
+.yellow {
+    --color: var(--brand-yellow);
+    --text-on-color: white;
+}
+
+.green {
+    --color: var(--brand-green);
+    --text-on-color: white;
 }
 
 .neutral-old {

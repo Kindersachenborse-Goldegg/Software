@@ -1,1 +1,16 @@
-<p>public-home-page works!</p>
+<main>
+    @for (item of listService.myLists(); track item.id) {
+    <mobile-list-overview [list]="item" />
+    }
+
+    <custom-button class="success create-btn" (click)="createList()" [disabled]="!canCreateList()">
+        <spinner [resource]="resource()" /> Neue Liste
+        erstellen
+    </custom-button>
+</main>
+
+<custom-popup [(open)]="showErrorPopup">
+    <h1>kein Platz</h1>
+    <p>leider ist kein Platz mehr frei</p>
+    <custom-button (click)="showErrorPopup.set(false)" class="success">Schließen</custom-button>
+</custom-popup>
