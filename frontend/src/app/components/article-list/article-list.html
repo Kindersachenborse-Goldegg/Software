@@ -1,0 +1,36 @@
+<table>
+    <thead>
+        <td>Nr</td>
+        <td>Name</td>
+        <td>Size</td>
+        <td>Price</td>
+    </thead>
+    <tbody>
+        @for (item of items(); track item.barcode) {
+        <tr [class.deleted]="item.deleted">
+            <td>{{ item.positionInList }}</td>
+            <td class="col">
+                <h4>
+                    {{ item.name }}
+                </h4>
+                <p class="muted">{{ item.barcode }}</p>
+            </td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.price | currency: "EUR" : "symbol" : "1.2-2" : undefined}}</td>
+            @if (actions()) {
+            <td class="always row">
+                @for (action of actions(); track $index) {
+                @if (!action.when || action.when(item)) {
+                <custom-button [className]="action.type" (click)="action.click(item, $event)" [isNoSubmit]="true">{{
+                    action.text }}</custom-button>
+                }
+                }
+            </td>
+            }
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <ng-content />
+    </tfoot>
+</table>

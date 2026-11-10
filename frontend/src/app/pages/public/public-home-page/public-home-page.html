@@ -1,6 +1,6 @@
 <main>
     @for (item of listService.myLists(); track item.id) {
-    <mobile-list-overview [list]="item" />
+    <mobile-list-overview [list]="item" [routerLink2]="['/public/list/', item.id]" />
     }
 
     <custom-button class="success create-btn" (click)="createList()" [disabled]="!canCreateList()">

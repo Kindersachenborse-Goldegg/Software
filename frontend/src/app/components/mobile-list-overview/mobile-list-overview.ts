@@ -1,15 +1,17 @@
 import { Component, effect, input, signal } from '@angular/core';
+import { RouterLink, UrlTree } from '@angular/router';
 import { ListModel } from '../../models';
 import { Bean } from '../bean/bean';
 
 @Component({
   selector: 'mobile-list-overview',
-  imports: [Bean],
+  imports: [Bean, RouterLink],
   templateUrl: './mobile-list-overview.html',
   styleUrl: './mobile-list-overview.css',
 })
 export class MobileListOverview {
   public list = input.required<ListModel>();
+  public routerLink2 = input.required<string | readonly any[] | UrlTree | null | undefined>();
   public colorClass = signal<string>("");
   public itemcount = signal<number>(0);
 

@@ -1,7 +1,9 @@
-div {
+a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
+    color: var(--bg-text);
 
     background-color: var(--bg-front);
     border: 1px solid var(--bg-text-muted);

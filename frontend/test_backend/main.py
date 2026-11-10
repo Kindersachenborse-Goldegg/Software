@@ -57,7 +57,7 @@ class RegisterResponseModel(BaseModel):
 class PublicItemModel(BaseModel):
     name: str
     size: Optional[str]
-    pice: int
+    price: int
     barcode: int
     positionInList: int
 
@@ -116,11 +116,11 @@ async def get_my_lists() -> List[ListModel]:
     return [
         ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
         ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
-            PublicItemModel(name="T-Shirt", size=None, pice=5, barcode=123456789124, positionInList=1),
-            PublicItemModel(name="Host", size="30/32", pice=5, barcode=123456789125, positionInList=2)
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789124, positionInList=1),
+            PublicItemModel(name="Hose", size="30/32", price=5, barcode=123456789125, positionInList=2)
         ]),
         ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
-            PublicItemModel(name="T-Shirt", size="S", pice=5, barcode=123456789123, positionInList=1)
+            PublicItemModel(name="T-Shirt", size="S", price=5, barcode=123456789123, positionInList=1)
         ])
     ]
 
@@ -133,11 +133,11 @@ async def create_new_list() -> List[ListModel]:
     return [
         ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
         ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
-            PublicItemModel(name="T-Shirt", size=None, pice=5, barcode=123456789124, positionInList=1),
-            PublicItemModel(name="Host", size="30/32", pice=5, barcode=123456789125, positionInList=2)
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789124, positionInList=1),
+            PublicItemModel(name="Hose", size="30/32", price=5, barcode=123456789125, positionInList=2)
         ]),
         ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
-            PublicItemModel(name="T-Shirt", size="S", pice=5, barcode=123456789123, positionInList=1)
+            PublicItemModel(name="T-Shirt", size="S", price=5, barcode=123456789123, positionInList=1)
         ]),
         ListModel(id=3, userId=0, name="Zwackelmann 1", maxItemCount=20, items=[])
     ]

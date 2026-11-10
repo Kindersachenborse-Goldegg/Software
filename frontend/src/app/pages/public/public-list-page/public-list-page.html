@@ -1,0 +1,6 @@
+<div>
+    <h1>{{ list()?.name }}</h1>
+    <bean class="green">{{ itemcount() }}/{{ list()?.maxItemCount }}</bean>
+</div>
+
+<article-list [items]="list()!.items" [actions]="actions" />
