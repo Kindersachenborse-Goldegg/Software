@@ -1,13 +1,21 @@
-from sqlalchemy import String
+from datetime import datetime
+from sqlalchemy import String, DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.models.base import Base
 
-
-class User(Base):
+class List(Base):
     __tablename__ = "lists"
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship(back_populates="lists")
-    items: Mapped[list["Item"]] = relationship(back_populates="list")
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    name: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
+    user: Mapped["User"] = relationship(back_populates="lists")
+    items: Mapped[list["Item"]] = relationship(
+        back_populates="list", cascade="all, delete-orphan"
+    )
