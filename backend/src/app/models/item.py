@@ -4,6 +4,7 @@ from sqlalchemy import String, DateTime, ForeignKey, Numeric, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
+
 class Item(Base):
     __tablename__ = "items"
 
@@ -17,7 +18,9 @@ class Item(Base):
     size: Mapped[str | None] = mapped_column(String(255))
     color: Mapped[str | None] = mapped_column(String(255))
     barcode: Mapped[str | None] = mapped_column(String(255), unique=True, index=True)
-    sold_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    sold_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

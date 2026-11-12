@@ -3,6 +3,7 @@ from sqlalchemy import String, DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
+
 class List(Base):
     __tablename__ = "lists"
 
