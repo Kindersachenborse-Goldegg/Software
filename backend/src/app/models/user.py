@@ -11,7 +11,9 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True)
     username: Mapped[str] = mapped_column(String(255), unique=True)
     password_hash: Mapped[str] = mapped_column(String(255))
-    role: Mapped[str] = mapped_column(String(20), default="seller")
+    role: Mapped[str] = mapped_column(
+        String(20), default="seller", server_default="seller"
+    )
     seller_number: Mapped[int | None] = mapped_column(unique=True)
 
     lists: Mapped[list["List"]] = relationship(
