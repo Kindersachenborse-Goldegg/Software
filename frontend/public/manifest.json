@@ -1,5 +1,5 @@
 {
-  "name": "Kindersachenbörse",
+  "name": "Ksb Goldegg",
   "start_url": "/",
   "scope": "/",
   "orientation": "portrait",
@@ -16,6 +16,6 @@
       "sizes": "192x192"
     }
   ],
-  "background_color": "peachpuff",
-  "theme_color": "rgb(255 218 185)"
+  "background_color": "#f9f9f9",
+  "theme_color": "#f9f9f9"
 }

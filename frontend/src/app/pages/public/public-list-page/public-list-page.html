@@ -1,6 +1,23 @@
-<div>
-    <h1>{{ list()?.name }}</h1>
-    <bean class="green">{{ itemcount() }}/{{ list()?.maxItemCount }}</bean>
-</div>
+<main>
+    <div class="row">
+        <div class="col">
+            <h2>{{ list()?.name }}</h2>
+            <p class="muted">{{ itemcount() }}/{{ list()?.maxItemCount }}</p>
+        </div>
 
-<article-list [items]="list()!.items" [actions]="actions" />
+        <custom-button class="success" (click)="printList()"><i class="bi bi-printer"></i></custom-button>
+    </div>
+
+    <article-list [items]="list()!.items" [actions]="actions" />
+
+    <form class="form" [formRoot]="form" [class.disabled]="itemcount() === list()?.maxItemCount">
+        <text-input inputId="name" label="Artikelname" autocomplete="off" [formField2]="form.name" />
+        <div class="row">
+            <text-input inputId="size" label="Größe" autocomplete="off" [formField2]="form.size" />
+            <number-input inputId="price" label="Preis" autocomplete="off" [formField2]="form.price" />
+        </div>
+        <error-list [form]="form" />
+
+        <custom-button [disabled]="form().invalid()" class="success">Hinzufügen</custom-button>
+    </form>
+</main>

@@ -22,6 +22,12 @@ export class LoginPage {
 
   public resource: WritableSignal<Resource<TokenResponseModel> | null> = signal(null)
 
+  constructor() {
+    if (this.authService.getAuthToken() != null) {
+      this.router.navigate(["public"], { replaceUrl: true })
+    }
+  }
+
   model = signal<LoginModel>({ username: "", password: "" })
   form = form(this.model, (schema) => {
     required(schema.username, { message: "Email muss ausgefüllt werden" });

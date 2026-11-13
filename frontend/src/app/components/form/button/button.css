@@ -29,11 +29,6 @@ input[type=submit] {
     padding-left: 1rem;
     padding-right: 1rem;
 
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.4;
-    }
-
     &:not(:disabled):hover {
         border: 2px solid var(--border-hover);
         background-color: var(--button-bg-hover);

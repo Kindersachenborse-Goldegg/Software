@@ -1,0 +1,27 @@
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    & h2 {
+        margin-bottom: 0;
+    }
+}
+
+form.form {
+    margin: 0 !important;
+}
+
+.muted {
+    color: var(--bg-text-muted);
+    font-size: small;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}

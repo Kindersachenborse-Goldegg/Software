@@ -3,14 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Annotated, Literal, Optional, List
 from asyncio import sleep
+import random
+import hashlib
 
 def readHeader(authorization: Annotated[str, Header()]):
     return authorization
-
-def readToken(header: Annotated[str, Depends(readHeader)]) -> str:
-    return header.split(" ", maxsplit=1)[1]
-
-Token = Annotated[str, Depends(readToken)]
 
 # Idee: 418 senden wenn zb register auf einem internal only system aufgerufen wird
 
@@ -54,11 +51,15 @@ class RegisterModel(BaseModel):
 class RegisterResponseModel(BaseModel):
     nickname: str
 
+class UserModel(RegisterModel, RegisterResponseModel):
+    id: int
+
 class PublicItemModel(BaseModel):
     name: str
     size: Optional[str]
     price: int
     barcode: int
+    deleted: bool
     positionInList: int
 
 class ListModel(BaseModel):
@@ -68,10 +69,32 @@ class ListModel(BaseModel):
     maxItemCount: int
     items: List[PublicItemModel]
 
+class UpdateItemModel(BaseModel):
+    deleted: bool
+
+class CreateItemModel(BaseModel):
+    name: str
+    price: int
+    size: str
+
+class PrintListResponse(BaseModel):
+    unauthenticatedUrl: str
+
+def readToken(header: Annotated[str, Depends(readHeader)]) -> UserModel:
+    userid = int(header.split(" ", maxsplit=1)[1])
+    for user in users:
+        if userid == user.id:
+            return user
+
+    raise HTTPException(status_code=401, detail="invalid token")
+
+Token = Annotated[UserModel, Depends(readToken)]
+
 @app.post("/api/login")
 async def login(loginModel: LoginRequestModel) -> LoginResponseModel:
-    if loginModel.username == "user":
-        return LoginResponseModel(token="TOKEN_" + loginModel.username)
+    for user in users:
+        if user.email == loginModel.username and user.password == loginModel.password:
+            return LoginResponseModel(token=str(user.id))
 
     raise HTTPException(
         status_code=401,
@@ -80,17 +103,21 @@ async def login(loginModel: LoginRequestModel) -> LoginResponseModel:
 
 @app.post("/api/register")
 async def register(model: RegisterModel) -> RegisterResponseModel:
-    if model.email == "used":
-        raise HTTPException(
-            status_code=409,
-            detail="Email bereits verwendet"
-        )
+    for user in users:
+            if user.email == model.email:
+                raise HTTPException(
+                            status_code=409,
+                            detail="Email bereits verwendet"
+                        )
 
-    if model.email == "voll":
-        raise HTTPException(
-            status_code=403,
-            detail="keine Plätze verfügbar"
-        )
+    if len(users) >= 2:
+        if model.email == "voll":
+            raise HTTPException(
+                status_code=403,
+                detail="keine Plätze verfügbar"
+            )
+
+    users.append(UserModel(id=len(users), nickname="Traube", email=model.email, password=model.password, firstname=model.firstname, lastname=model.lastname, phone=model.phone, city=model.city, accept_tnc=model.accept_tnc))
 
     return RegisterResponseModel(nickname="nick_" + model.email)
 
@@ -111,33 +138,94 @@ async def set_password(model: SetPasswordModel) -> str:
         detail="secret nicht gefunden"
     )
 
-@app.get("/api/list")
-async def get_my_lists() -> List[ListModel]:
-    return [
-        ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
+users = [
+    UserModel(id=0, nickname="Birne", firstname="Noah", lastname="Rottermanner", email="user", phone="1245789", city="Goldegg", password="user", accept_tnc=True)
+]
+
+lists = [ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
         ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
-            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789124, positionInList=1),
-            PublicItemModel(name="Hose", size="30/32", price=5, barcode=123456789125, positionInList=2)
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789124, positionInList=6, deleted=False),
+            PublicItemModel(name="Hose", size="30/32", price=5, barcode=123456789125, positionInList=2, deleted=True),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789126, positionInList=3, deleted=False),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789127, positionInList=4, deleted=True),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789128, positionInList=5, deleted=False),
+            PublicItemModel(name="First", size=None, price=5, barcode=123456789129, positionInList=1, deleted=False),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789121, positionInList=7, deleted=False),
+            PublicItemModel(name="T-Shirt", size=None, price=500, barcode=123456789122, positionInList=8, deleted=False),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789123, positionInList=9, deleted=False),
+            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789120, positionInList=10, deleted=True),
         ]),
         ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
-            PublicItemModel(name="T-Shirt", size="S", price=5, barcode=123456789123, positionInList=1)
-        ])
-    ]
+            PublicItemModel(name="T-Shirt", size="S", price=5, barcode=123456789130, positionInList=1, deleted=False)
+        ])]
+
+@app.get("/api/list")
+async def get_my_lists(user: Token) -> List[ListModel]:
+    return [x for x in lists if x.userId == user.id]
 
 @app.post("/api/list")
-async def create_new_list() -> List[ListModel]:
+async def create_new_list(user: Token) -> List[ListModel]:
+    if len(lists) >= 15:
+        raise HTTPException(
+            status_code=403,
+            detail="Leider kein Platz mehr frei :("
+        )
+
+    countwithname = 0
+    for list in lists:
+        if list.userId == user.id and list.name.startswith(user.nickname):
+            countwithname += 1
+
+    if countwithname == 0:
+        countwithname = ""
+
+    lists.append(ListModel(id=len(lists), userId=user.id, name=f"{user.nickname} {countwithname}", maxItemCount=60, items=[]))
+    
+    return [x for x in lists if x.userId == user.id]
+
+@app.post("/api/item/{id:int}")
+async def updateItem(id: int, dto: UpdateItemModel, user: Token) -> ListModel:
+    for list in lists:
+        if list.userId != user.id:
+            continue
+
+        for item in list.items:
+            if item.barcode == id:
+                item.deleted = dto.deleted
+
+                return list
+
+@app.post("/api/list/{id:int}")
+async def updateList(id: int, dto: CreateItemModel, user: Token) -> ListModel:
+    for list in lists:
+        if list.userId != user.id or list.id != id:
+            continue
+
+        list.items.append(PublicItemModel(name=dto.name, size=None if dto.size == "" else dto.size, price=dto.price, barcode=random.randint(int(1e13),int(1e14-1)), positionInList=len(list.items) + 1, deleted=False))
+
+        return list
+
+SECRET = "fdsjagsddrer213432t54fasd63"
+
+@app.post("/api/list/{id:int}/print")
+async def printList(id: int, user: Token) -> PrintListResponse:
+    for list in lists:
+        if list.userId != user.id or list.id != id:
+            continue
+
+        url = f"/api/list/{id}/print/{hashlib.sha256(f'{SECRET}{list.id}'.encode()).hexdigest()}"
+
+        return PrintListResponse(unauthenticatedUrl=url)
+
+@app.get("/api/list/{id:int}/print/{secret:str}")
+async def printList(id: int, secret: str) -> None:
+    for list in lists:
+        if list.id != id or secret != hashlib.sha256(f'{SECRET}{list.id}'.encode()).hexdigest():
+            continue
+
+        return str(list)
+
     raise HTTPException(
         status_code=403,
-        detail="Leider kein Platz mehr frei :("
+        detail="invalid secret"
     )
-    return [
-        ListModel(id=0, userId=0, name="Apfel 1", maxItemCount=60, items=[]),
-        ListModel(id=1, userId=0, name="Apfel 2", maxItemCount=3, items=[
-            PublicItemModel(name="T-Shirt", size=None, price=5, barcode=123456789124, positionInList=1),
-            PublicItemModel(name="Hose", size="30/32", price=5, barcode=123456789125, positionInList=2)
-        ]),
-        ListModel(id=2, userId=0, name="Schneewittchen 3", maxItemCount=1, items=[
-            PublicItemModel(name="T-Shirt", size="S", price=5, barcode=123456789123, positionInList=1)
-        ]),
-        ListModel(id=3, userId=0, name="Zwackelmann 1", maxItemCount=20, items=[])
-    ]

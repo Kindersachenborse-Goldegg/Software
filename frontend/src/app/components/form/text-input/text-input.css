@@ -1,6 +1,8 @@
 :host {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
 
     &:not(.hide-required):has(input[required]) {
         &>label::after {
@@ -16,6 +18,7 @@ label {
 }
 
 input {
+    flex-grow: 1;
     --border: var(--bg-text-muted);
     background-color: var(--bg-front);
     color: var(--bg-text);

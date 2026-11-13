@@ -12,7 +12,14 @@ export class AuthService {
   private apiService = inject(ApiService);
 
   public getAuthToken(): string | null {
+    if (this.authToken === null) {
+      this.authToken = localStorage.getItem("token")
+    }
     return this.authToken;
+  }
+
+  public resetToken() {
+    this.authToken = null;
   }
 
   /**
@@ -30,6 +37,7 @@ export class AuthService {
     resource.subscribe(res => {
       if (res.state === "done") {
         this.authToken = res.value.token;
+        localStorage.setItem("token", res.value.token)
       }
     })
 

@@ -2,18 +2,18 @@
     <thead>
         <td>Nr</td>
         <td>Name</td>
-        <td>Size</td>
-        <td>Price</td>
+        <td>Größe</td>
+        <td>Preis</td>
     </thead>
     <tbody>
         @for (item of items(); track item.barcode) {
         <tr [class.deleted]="item.deleted">
-            <td>{{ item.positionInList }}</td>
+            <td class="position">{{ item.positionInList }}</td>
             <td class="col">
-                <h4>
+                <h4 class="name">
                     {{ item.name }}
                 </h4>
-                <p class="muted">{{ item.barcode }}</p>
+                <!--<p class="muted">{{ item.barcode }}</p>-->
             </td>
             <td>{{ item.size }}</td>
             <td>{{ item.price | currency: "EUR" : "symbol" : "1.2-2" : undefined}}</td>
@@ -21,8 +21,18 @@
             <td class="always row">
                 @for (action of actions(); track $index) {
                 @if (!action.when || action.when(item)) {
-                <custom-button [className]="action.type" (click)="action.click(item, $event)" [isNoSubmit]="true">{{
-                    action.text }}</custom-button>
+                <custom-button [className]="action.type" (click)="runOnClick(action, item, $event)" [isNoSubmit]="true"
+                    [disabled]="!!(action.disabled && action.disabled(item))">
+                    @if (resources()[item.barcode]() === null || resources()[item.barcode]()?.state === "done") {
+                    @if(action.text.startsWith("bi")) {
+                    <i [class]="['bi', action.text]"></i>
+                    } @else {
+                    {{ action.text }}
+                    }
+                    } @else {
+                    <spinner [resource]="resources()[item.barcode]()" />
+                    }
+                </custom-button>
                 }
                 }
             </td>

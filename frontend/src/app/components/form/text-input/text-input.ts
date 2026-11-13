@@ -40,3 +40,15 @@ export class EmailInput extends TextInput {
     this.type.set("email")
   }
 }
+
+@Component({
+  selector: 'number-input',
+  imports: [FormField, ErrorList],
+  templateUrl: './text-input.html',
+  styleUrl: './text-input.css',
+})
+export class NumberInput extends BaseInput<number> {
+  public placeholder = input<string>("");
+  public type = signal<string>("number");
+  public label = input.required<string>();
+}

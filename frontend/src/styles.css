@@ -23,48 +23,90 @@
     /* general colors */
     --black: #060606;
     --white: #fafafa;
-    --danger: oklch(0.7 0.2 30);
 
     --brand-green: #6ea71a;
     --brand-yellow: #f89d0e;
     --brand-red: #ae0808;
 
-    /* light mode */
-    --primary: var(--brand-green);
-    --primary-hover: color-mix(in oklab, var(--primary), black 15%);
-    --primary-text: var(--white);
-    --bg: #f9f9f9;
-    --bg-front: #f3f3f3;
-    --bg-text: var(--black);
-    --bg-text-muted: #c5c5c5;
-
     --outline: 3px solid var(--primary);
     --border-radius: 0.25rem;
+
+    /* light mode */
+
+    --primary: var(--brand-green);
+    /* primary color */
+
+    --primary-hover: color-mix(in oklab, var(--primary), black 15%);
+    /* primary color on hover */
+
+    --danger: var(--brand-red);
+    /* danger color */
+
+    --danger-hover: color-mix(in oklab, var(--danger), black 15%);
+    /* danger color on hover */
+
+    --primary-text: var(--white);
+    /* text that is on --primary */
+
+    --bg: #f9f9f9;
+    /* main background */
+
+    --bg-front: #f3f3f3;
+    /* secondary background (for inputs, etc) */
+
+    --bg-text: var(--black);
+    /* text that is on --bg or --bg-front */
+
+    --bg-text-muted: #c5c5c5;
+    /* text that is on --bg or --bg-front and muted */
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: todo) {
+
+    /* TODO */
     :root {
-        --primary: lightblue;
+        /*--primary: lightblue;*/
         /* primary color */
 
-        --primary-hover: color-mix(in oklab, var(--primary), black 15%);
+        --primary-hover: color-mix(in oklab, var(--primary), white 15%);
         /* primary color on hover */
 
         --primary-text: white;
         /* text that is on --primary */
 
-        --bg: red;
+        --bg: #060606;
         /* main background */
 
-        --bg-front: green;
+        --bg-front: #121212;
         /* secondary background (for inputs, etc) */
 
-        --bg-text: yellow;
+        --bg-text: #f9f9f9;
         /* text that is on --bg or --bg-front */
 
-        --bg-text-muted: purple;
+        --bg-text-muted: #3a3a3a;
         /* text that is on --bg or --bg-front and muted */
     }
+}
+
+/*:root {
+        --primary: lightblue;
+
+        --primary-hover: color-mix(in oklab, var(--primary), black 15%);
+
+        --primary-text: white;
+
+        --bg: red;
+
+        --bg-front: green;
+
+        --bg-text: yellow;
+
+        --bg-text-muted: purple;
+}*/
+
+
+i.bi {
+    font-size: large;
 }
 
 .red {
@@ -80,16 +122,6 @@
 .green {
     --color: var(--brand-green);
     --text-on-color: white;
-}
-
-.neutral-old {
-    --border: var(--bg-front);
-    --border-hover: var(--bg-text-muted);
-
-    --text: var(--bg-text);
-
-    --button-bg: var(--bg);
-    --button-bg-hover: var(--bg-front);
 }
 
 .neutral {
@@ -110,6 +142,16 @@
 
     --button-bg: var(--primary);
     --button-bg-hover: var(--primary-hover);
+}
+
+.danger {
+    --border: var(--danger);
+    --border-hover: var(--danger-hover);
+
+    --text: var(--primary-text);
+
+    --button-bg: var(--danger);
+    --button-bg-hover: var(--danger-hover);
 }
 
 * {
@@ -153,7 +195,8 @@ header.center {
     }
 }
 
-form.form {
+form.form,
+main {
     margin: 0.5rem;
     display: flex;
     flex-direction: column;
@@ -164,7 +207,17 @@ form.form {
     margin-right: 2rem;
 }
 
+form.form .row {
+    column-gap: 0.5rem;
+}
+
 .rightbound {
     display: flex;
     justify-content: end;
+}
+
+:disabled,
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
 }

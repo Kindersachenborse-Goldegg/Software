@@ -1,6 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, Injector, runInInjectionContext, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { lastValueFrom, Observable, ReplaySubject } from 'rxjs';
+import { AuthService } from './auth-service';
 
 export type ErrorCodes = { [key: number]: string }
 
@@ -15,7 +17,7 @@ export type Resource<T> =
   { state: "error", error: ApiError, value: T } |
   { state: "done", error: null, value: T }
 
-const BASE_URL = `${location.protocol}//${location.hostname}/api`
+const BASE_URL = `${location.protocol}//${location.hostname}:${location.port}/api`
 
 export const getError = async <T>(resource: Observable<Resource<T>>): Promise<{ kind: 'serverError', message: string } | undefined> => {
   const response = await lastValueFrom(resource);
@@ -25,11 +27,21 @@ export const getError = async <T>(resource: Observable<Resource<T>>): Promise<{ 
   return undefined
 }
 
+export const getValue = async <T>(resource: Observable<Resource<T>>): Promise<T | undefined> => {
+  const response = await lastValueFrom(resource);
+  if (response.state == "done") {
+    return response.value;
+  }
+  return undefined
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private httpClient = inject(HttpClient)
+  private router = inject(Router);
+  private injector = inject(Injector);
 
   /**
    * a list of all unexpected errors to show the user
@@ -65,7 +77,16 @@ export class ApiService {
         }
 
         if (errorType === "unknown") {
-          this.errorList.update(l => [...l, error])
+          if (error.statusCode === 401) {
+            runInInjectionContext(this.injector, () => {
+              const authService = inject(AuthService);
+              localStorage.removeItem("token")
+              authService.resetToken();
+              this.router.navigate(["/"])
+            })
+          } else {
+            this.errorList.update(l => [...l, error])
+          }
         }
         subj.next({ state: "error", error, value: defaultValue })
         subj.complete()
