@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CustomPopup } from '../../../components/custom-popup/custom-popup';
 import { Button } from '../../../components/form/button/button';
+import { FullscreenSpinner } from '../../../components/fullscreen-spinner/fullscreen-spinner';
 import { LoadingSpinner } from '../../../components/loading-spinner/loading-spinner';
 import { MobileListOverview } from '../../../components/mobile-list-overview/mobile-list-overview';
 import { Resource } from '../../../services/api-service';
@@ -8,7 +9,7 @@ import { PublicListSerivce } from '../../../services/public-list-serivce';
 
 @Component({
   selector: 'public-home-page',
-  imports: [MobileListOverview, Button, LoadingSpinner, CustomPopup],
+  imports: [MobileListOverview, Button, LoadingSpinner, CustomPopup, FullscreenSpinner],
   templateUrl: './public-home-page.html',
   styleUrl: './public-home-page.css',
 })

@@ -3,8 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Annotated, Literal, Optional, List
 from asyncio import sleep
+import jwt
 import random
 import hashlib
+
+SECRET = "fdsjagsddrer213432t54fasd63"
 
 def readHeader(authorization: Annotated[str, Header()]):
     return authorization
@@ -124,14 +127,24 @@ async def register(model: RegisterModel) -> RegisterResponseModel:
 @app.post("/api/reset-password")
 async def reset_password(model: ResetPasswordModel) -> str:
     # die richtige url lautet: <frontend>/public/set-password?sec=<secret>
-    print("Password reset for user:", repr(model.email), repr(f"supersecret_{hash(model.email)}"))
+
+    for user in users:
+        if user.email == model.email:
+            encoded = jwt.encode({"userId": user.id}, SECRET, algorithm="HS256")
+            print(f"https://noah.taube.unser.dns64.de/public/set-password?sec={encoded}")
     return "OK"
 
 @app.post("/api/set-password")
 async def set_password(model: SetPasswordModel) -> str:
-    if model.secret.startswith("supersecret"):
-        print("Password set to:", repr(model.password), "using secret", repr(model.secret))
-        return "OK"
+    try:
+        payload = jwt.decode(model.secret, SECRET, algorithms=["HS256"])
+        userId = payload["userId"]
+        for user in users:
+            if user.id == userId:
+                user.password = model.password
+                return "OK"
+    except:
+        pass
 
     raise HTTPException(
         status_code=404,
@@ -205,7 +218,6 @@ async def updateList(id: int, dto: CreateItemModel, user: Token) -> ListModel:
 
         return list
 
-SECRET = "fdsjagsddrer213432t54fasd63"
 
 @app.post("/api/list/{id:int}/print")
 async def printList(id: int, user: Token) -> PrintListResponse:

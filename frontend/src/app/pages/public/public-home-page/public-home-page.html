@@ -1,3 +1,5 @@
+<fullscreen-spinner [resource]="listService.resource()" />
+
 <main>
     @for (item of listService.myLists(); track item.id) {
     <mobile-list-overview [list]="item" [routerLink2]="['/public/list/', item.id]" />

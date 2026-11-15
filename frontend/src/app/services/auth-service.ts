@@ -19,6 +19,7 @@ export class AuthService {
   }
 
   public resetToken() {
+    localStorage.removeItem("token")
     this.authToken = null;
   }
 

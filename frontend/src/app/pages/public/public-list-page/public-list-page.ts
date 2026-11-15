@@ -5,13 +5,15 @@ import { Action, ArticleList } from '../../../components/article-list/article-li
 import { ErrorList } from '../../../components/error-list/error-list';
 import { Button } from '../../../components/form/button/button';
 import { NumberInput, TextInput } from '../../../components/form/text-input/text-input';
+import { FullscreenSpinner } from '../../../components/fullscreen-spinner/fullscreen-spinner';
+import { LoadingSpinner } from '../../../components/loading-spinner/loading-spinner';
 import { CreateItemModel, ListModel, PublicItemModel } from '../../../models';
 import { getError, getValue, Resource } from '../../../services/api-service';
 import { PublicListSerivce } from '../../../services/public-list-serivce';
 
 @Component({
   selector: 'public-list-page',
-  imports: [ArticleList, FormRoot, TextInput, ErrorList, Button, NumberInput],
+  imports: [ArticleList, FormRoot, TextInput, ErrorList, Button, NumberInput, FullscreenSpinner, LoadingSpinner],
   templateUrl: './public-list-page.html',
   styleUrl: './public-list-page.css',
 })
@@ -43,7 +45,7 @@ export class PublicListPage {
   ]
 
   private activatedRoute = inject(ActivatedRoute);
-  private listService = inject(PublicListSerivce);
+  public listService = inject(PublicListSerivce);
 
   public listId = signal<number | null>(null);
   public itemcount = signal<number>(0);
@@ -52,10 +54,10 @@ export class PublicListPage {
       return null;
     }
 
-    return this.listService.myLists().find(l => l.id === this.listId())!
+    return this.listService.myLists().find(l => l.id === this.listId()) || null;
   })
 
-  private resource = signal<Resource<any> | null>(null)
+  public resource = signal<Resource<any> | null>(null)
   private model = signal<CreateItemModel>({ name: "", price: NaN, size: "" });
   public form = form(this.model, (schema) => {
     required(schema.name, { message: "Der Name muss angegeben werden" })

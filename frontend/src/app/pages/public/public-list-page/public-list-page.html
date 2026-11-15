@@ -1,3 +1,5 @@
+<fullscreen-spinner [resource]="listService.resource()" />
+
 <main>
     <div class="row">
         <div class="col">
@@ -5,10 +7,18 @@
             <p class="muted">{{ itemcount() }}/{{ list()?.maxItemCount }}</p>
         </div>
 
-        <custom-button class="success" (click)="printList()"><i class="bi bi-printer"></i></custom-button>
+        <custom-button class="success" (click)="printList()">
+            @if (resource() === null || resource()?.state === "done") {
+            <i class="bi bi-printer"></i>
+            } @else {
+            <spinner [resource]="resource()" />
+            }
+        </custom-button>
     </div>
 
+    @if(list() !== null) {
     <article-list [items]="list()!.items" [actions]="actions" />
+    }
 
     <form class="form" [formRoot]="form" [class.disabled]="itemcount() === list()?.maxItemCount">
         <text-input inputId="name" label="Artikelname" autocomplete="off" [formField2]="form.name" />
