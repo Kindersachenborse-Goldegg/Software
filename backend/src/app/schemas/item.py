@@ -19,6 +19,7 @@ class ItemUpdate(CamelModel):
     price: Price | None = None
     size: str | None = Field(default=None, max_length=255)
     color: str | None = Field(default=None, max_length=255)
+    deleted: bool | None = None
 
 
 class ItemRead(CamelModel):
@@ -30,5 +31,6 @@ class ItemRead(CamelModel):
     size: str | None
     color: str | None
     barcode: str | None
+    deleted: bool
     sold_at: datetime | None
     created_at: datetime
