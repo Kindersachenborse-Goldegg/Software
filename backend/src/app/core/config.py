@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    # no default on purpose, the app should fail loudly if it's not configured
     database_url: str
 
     max_users: PositiveInt

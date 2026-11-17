@@ -12,7 +12,7 @@ from app.core.deps import AdminUser
 from app.main import app
 from app.models import User
 
-# a seller-only check needs an admin route, and there isn't one yet
+# AdminUser has no route on the app, so the 403 check uses its own app
 admin_app = FastAPI()
 
 
@@ -23,7 +23,6 @@ def admin_only(user: AdminUser) -> dict:
 
 @pytest.fixture
 def db() -> Iterator[Session]:
-    # everything a test writes is rolled back, so your dev database stays as it was
     with engine.connect() as connection:
         transaction = connection.begin()
         session = Session(bind=connection, join_transaction_mode="create_savepoint")

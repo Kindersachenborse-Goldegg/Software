@@ -40,8 +40,7 @@ AppSettings = Annotated[Settings, Depends(get_settings)]
 def register(data: RegisterRequest, db: Db, settings: AppSettings) -> RegisterResponse:
     email = data.email.strip().lower()
 
-    # registrations run one at a time, otherwise two at once could both pass
-    # the MAX_USERS check or get the same seller number
+    # one registration at a time, or two can both pass MAX_USERS or share a seller number
     db.execute(text("SELECT pg_advisory_xact_lock(1)"))
 
     if db.scalar(select(User.id).where(func.lower(User.email) == email)):
@@ -52,7 +51,6 @@ def register(data: RegisterRequest, db: Db, settings: AppSettings) -> RegisterRe
         raise HTTPException(status.HTTP_403_FORBIDDEN, "keine Plätze mehr frei")
 
     seller_number = (db.scalar(select(func.max(User.seller_number))) or 0) + 1
-    # the seller number is unique, so the nickname is too
     nickname = f"{secrets.choice(NICKNAME_WORDS)}{seller_number}"
 
     db.add(
@@ -81,8 +79,7 @@ def login(data: LoginRequest, db: Db) -> TokenResponse:
         )
     )
 
-    # unknown users still get a hash check, so the response time doesn't reveal
-    # which accounts exist
+    # verify a hash even with no user, so timing doesn't reveal which accounts exist
     hashed = user.password_hash if user else DUMMY_HASH
     if not verify_password(data.password, hashed) or user is None:
         raise HTTPException(

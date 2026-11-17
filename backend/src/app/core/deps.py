@@ -8,7 +8,7 @@ from app.core.database import get_db
 from app.core.security import decode_access_token
 from app.models import User
 
-# auto_error=False so a missing header gives our 401 instead of FastAPI's default
+# auto_error=False: a missing header is our 401, not FastAPI's
 bearer = HTTPBearer(auto_error=False)
 
 

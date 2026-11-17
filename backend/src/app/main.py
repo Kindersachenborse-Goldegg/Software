@@ -9,7 +9,6 @@ from app.routers import auth
 
 app = FastAPI(title="KSB Backend")
 
-# Noah's frontend calls everything under /api
 app.include_router(auth.router, prefix="/api")
 
 

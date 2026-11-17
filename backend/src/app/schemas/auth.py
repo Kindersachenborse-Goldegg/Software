@@ -13,7 +13,6 @@ class RegisterRequest(CamelModel):
     city: str = Field(min_length=1, max_length=255)
     email: str = Field(min_length=3, max_length=255, pattern=r"^[^@\s]+@[^@\s]+$")
     password: str = Field(min_length=8, max_length=255)
-    # the frontend sends this one in snake_case
     accept_tnc: Literal[True] = Field(alias="accept_tnc")
 
 
