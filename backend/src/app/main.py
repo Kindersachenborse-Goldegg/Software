@@ -5,8 +5,12 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.routers import auth
 
 app = FastAPI(title="KSB Backend")
+
+# Noah's frontend calls everything under /api
+app.include_router(auth.router, prefix="/api")
 
 
 @app.get("/health")

@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import PositiveInt
+from pydantic import Field, PositiveInt
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     max_users: PositiveInt
     max_lists_per_seller: PositiveInt
     max_items_per_list: PositiveInt
+
+    secret_key: str = Field(min_length=32)
+    access_token_expire_minutes: PositiveInt
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
