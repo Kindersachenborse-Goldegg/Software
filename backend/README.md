@@ -29,3 +29,12 @@ uv run alembic downgrade -1
 
 New models must be imported in `src/app/models/__init__.py`,
 otherwise autogenerate doesn't see them.
+
+## Tests
+
+The tests need postgres running and a migrated database. Everything they write
+is rolled back afterwards, so your data stays untouched.
+
+```
+uv run pytest
+```
