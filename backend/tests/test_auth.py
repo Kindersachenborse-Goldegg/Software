@@ -85,6 +85,34 @@ def test_register_without_tnc_is_rejected(client: TestClient):
     assert response.status_code == 422
 
 
+def test_register_accepts_camel_case_tnc(client: TestClient):
+    payload = register_payload()
+    del payload["accept_tnc"]
+    payload["acceptTnc"] = True
+
+    response = client.post("/api/register", json=payload)
+
+    assert response.status_code == 201
+
+
+@pytest.mark.parametrize("field", ["firstname", "lastname", "phone", "city"])
+def test_register_blank_text_is_rejected(client: TestClient, field: str):
+    response = client.post("/api/register", json=register_payload(**{field: "   "}))
+
+    assert response.status_code == 422
+
+
+def test_register_stores_trimmed_name(client: TestClient, db: Session):
+    response = client.post(
+        "/api/register", json=register_payload(firstname="  Anna  ", lastname="  Huber  ")
+    )
+
+    assert response.status_code == 201
+    user = db.scalar(select(User).where(User.email == "anna@example.com"))
+    assert user.firstname == "Anna"
+    assert user.lastname == "Huber"
+
+
 def test_register_when_full_is_403(client: TestClient, db: Session):
     sellers = db.scalar(select(func.count()).where(User.role == "seller"))
     full = get_settings().model_copy(update={"max_users": sellers + 1})
